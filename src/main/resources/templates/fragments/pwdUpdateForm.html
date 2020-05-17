@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Password Update Form</title>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      var policyPattern = /*[[${policyPattern}]]*/;
+      var passwordStrengthI18n = {
+          0: /*[[#{screen.pm.password.strength.0}]]*/,
+          1: /*[[#{screen.pm.password.strength.1}]]*/,
+          2: /*[[#{screen.pm.password.strength.2}]]*/,
+          3: /*[[#{screen.pm.password.strength.3}]]*/,
+          4: /*[[#{screen.pm.password.strength.4}]]*/
+      };
+      /*]]>*/
+    </script>
+</head>
+<body>
+    <div class="alert alert-info">
+        <form id="passwordManagementForm" th:if="${passwordManagementEnabled}" method="post" th:object="${password}">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                <span th:each="err : ${#fields.errors('*')}" th:utext="${err}">Error text</span>
+            </div>
+            <div class="form-group pwd-update">
+                <label for="password" style="margin-right:16px;" th:utext="#{screen.pm.enterpsw}">Enter Password:</label>&nbsp;
+                <input class="form-control" type="password" id="password" th:field="*{password}" required/>
+            </div>
+            <div class="form-group pwd-update">
+                <label for="confirmedPassword" th:utext="#{screen.pm.confirmpsw}">Confirm Password:</label>&nbsp;
+                <input class="form-control" type="password" id="confirmedPassword" th:field="*{confirmedPassword}" required/>
+            </div>
+            <div class="form-group" id="password-strength-notes">
+                <div id="password-policy-violation-msg" class="alert alert-danger" role="alert" style="display: none;">
+                    <span class="fas fa-exclamation-circle" aria-hidden="true"></span>&nbsp;
+                    <strong th:text="#{screen.pm.password.policyViolation}">Password does not match the password policy requirement.</strong>
+                </div>
+                <div id="password-confirm-mismatch-msg" class="alert alert-danger" role="alert" style="display: none;">
+                    <span class="fas fa-exclamation-circle" aria-hidden="true"></span>&nbsp;
+                    <strong th:text="#{screen.pm.password.confirmMismatch}">Passwords do not match.</strong>
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>
+                <input type="hidden" name="_eventId" value="submit"/>
+                <input class="btn btn-submit" name="submit" accesskey="s" th:value="#{screen.pm.button.submit}" th:attr="data-processing-text=#{screen.welcome.button.loginwip}" value="SUBMIT" id="submit" type="submit" disabled="true"/>
+                &nbsp;
+                <a class="btn btn-danger" th:href="@{/login}" th:text="#{screen.pm.button.cancel}">CANCEL</a>
+            </div>
+        </form>
+        <p th:unless="${passwordManagementEnabled}" th:utext="${expiredPass} ? #{screen.expiredpass.message} : #{screen.mustchangepass.message}">Expired/Must Change Password</p>
+    </div>
+</body>
+</html>

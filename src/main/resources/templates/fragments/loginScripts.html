@@ -1,0 +1,48 @@
+<script type="text/javascript">
+    // Disable submit button once pressed to prevent double-submissions
+    $("#fm1").submit(function() {
+        $(":submit").attr("disabled", true);
+        $(":submit").attr("value", "processing..");
+        $(":submit").css("cursor", "not-allowed");
+        return true;
+    });
+
+</script>
+
+<script type="text/javascript">
+    // Cleanup username input, lowercase and trim whitespace
+    if (!String.prototype.trim) {
+        (function() {
+            var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+            String.prototype.trim = function() {
+                return this.replace(rtrim, '');
+            };
+        })
+        ();
+    }
+
+    var real_username = function() {
+        var user = document.getElementById("username");
+        user.value = user.value.trim().toLowerCase();
+        return true;
+    };
+
+</script>
+
+<script type="text/javascript">
+
+    // Warn if caps lock key is on
+    var input_pwd = document.getElementById("password");
+    var key_capslock = document.getElementById("capslock-on");
+
+    $(input_pwd).keypress(function (event) {
+        var input_string = String.fromCharCode(event.which);
+        if (input_string.toUpperCase() === input_string && input_string.toLowerCase() !== input_string && !event.shiftKey) {
+            key_capslock.style.display = "block";
+            key_capslock.style.color = "red";
+        } else {
+            key_capslock.style.display = "none";
+        }
+    });
+
+</script>
